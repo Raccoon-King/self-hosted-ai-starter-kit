@@ -5,11 +5,11 @@ volumes:
   qdrant_storage:
 
 networks:
-  demo:
+  mapache:
 
 x-n8n: &service-n8n
   image: n8nio/n8n:latest
-  networks: ['demo']
+  networks: ['mapache']
   environment:
     - DB_TYPE=postgresdb
     - DB_POSTGRESDB_HOST=postgres
@@ -25,7 +25,7 @@ x-n8n: &service-n8n
 x-ollama: &service-ollama
   image: ollama/ollama:latest
   container_name: ollama
-  networks: ['demo']
+  networks: ['mapache']
   restart: unless-stopped
   ports:
     - 11434:11434
@@ -34,7 +34,7 @@ x-ollama: &service-ollama
 
 x-init-ollama: &init-ollama
   image: ollama/ollama:latest
-  networks: ['demo']
+  networks: ['mapache']
   container_name: ollama-pull-llama
   volumes:
     - ollama_storage:/root/.ollama
@@ -46,7 +46,7 @@ x-init-ollama: &init-ollama
 services:
   postgres:
     image: postgres:16-alpine
-    networks: ['demo']
+    networks: ['mapache']
     restart: unless-stopped
     environment:
       - POSTGRES_USER
@@ -92,7 +92,7 @@ services:
   qdrant:
     image: qdrant/qdrant
     container_name: qdrant
-    networks: ['demo']
+    networks: ['mapache']
     restart: unless-stopped
     ports:
       - 6333:6333
